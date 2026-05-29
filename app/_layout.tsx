@@ -1,10 +1,27 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { LogBox, Platform } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+
+// Ignore third-party deprecation warnings
+if (Platform.OS === 'web') {
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes('props.pointerEvents is deprecated')
+    ) {
+      return;
+    }
+    originalWarn(...args);
+  };
+} else {
+  LogBox.ignoreLogs(['props.pointerEvents is deprecated']);
+}
 
 export const unstable_settings = {
   anchor: '(tabs)',
